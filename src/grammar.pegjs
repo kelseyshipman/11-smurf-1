@@ -4,38 +4,19 @@ calculator
 expr 
     = head:factor rest:(addop factor)*
     { return rest.reduce (
-        (result, [op, right]) => 
-        {
-            if(op == "-") {
-                return result - right}
-            else {
-                return result + right
-            }
-        },
+        (result, [op, _, right]) => new AST.BinOp(result, op, right)
         head
-      )
+        )
     }
 
 factor
   = head:term rest:(mulop factor)*
     { return rest.reduce(
-      (result, [op, right]) => 
-        {
-            if(op == "/") {
-                return result / right}
-            else {
-                return result * right
-            }
-        },
-        head
-      )
+        (result, [op, _, right]) => new AST.BinOp(result, op, right)
+        head
+        )
     }
 
-addop
-    = "+"/"-"
-
-mulop
-    ="*"/"/"
 term 
     = integer
     / _ "(" expr: expr ")" _
@@ -43,7 +24,13 @@ term
 
 integer
     = _ digits:"-"? [0-9]+ _
-    { return parseInt(text(), 10); }
+    { return new AST.Integer(parseInt(digits.join(""), 10)) }
 
+addop
+    = "+"/"-"
+
+mulop
+    ="*"/"/"
+    
 _ "whitespace"
   = [ \t\n\r]*
