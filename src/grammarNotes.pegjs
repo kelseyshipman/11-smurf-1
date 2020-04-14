@@ -36,6 +36,7 @@ addop
 
 mulop
     ="*"/"/"
+  
 term 
     = integer
     / _ "(" expr: expr ")" _
@@ -46,4 +47,4 @@ integer
     { return parseInt(text(), 10); }
 
 _ "whitespace"
-  = [ \t\n\r]*
+    = [ \t\n\r]*
