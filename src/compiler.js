@@ -28,6 +28,8 @@
 
 
 export default function compileAndRun(grammar, script, printFunction) {
-
-  return // ... the value returned by executing the SMURF script
+  let ast = grammar.parse(script, { AST: AST }) 
+  let interpreter = new Interpreter()
+  let result = interpreter.visit(ast)
+  return result // ... the value returned by executing the SMURF script
 }
